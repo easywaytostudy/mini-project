@@ -1,0 +1,348 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+
+{% block content %}
+		<script>
+			$(document).ready(function(){
+			    $("#hide").click(function(){
+			        $(".allsearch").hide(1000);
+			    });
+			    $("#show").click(function(){
+			        $(".allsearch").show(1000);
+			    });
+			});
+		</script>
+			<div class="row">
+				<div class="col-sm-4">
+
+					<div class="panel-group">
+	        			<div class="panel panel-default" style="margin-top: 20px;">
+	        				<div class="panel-heading" style="text-align:center;"><h4>Add Book Record</h4></div>
+	        				<div class="panel-body">
+	        					<form method="post" enctype="multipart/form-data">
+	        						{% csrf_token %}
+	        						{{ form.as_p }}
+	        						<button type="submit" class="btn btn-default">Submit</button>
+	        						<button type="reset" class="btn btn-default">Reset</button>
+	        					</form>
+	        				</div>
+	        			</div>
+	        		</div>
+
+				</div>
+
+				<div class="col-sm-8">
+
+
+					<div class="panel-group">
+							<div class="panel panel-default" style="margin-top: 20px;">
+		        				<div class="panel-heading" style="text-align:center;"><h4>View Book Record</h4>
+		        				</div>
+		        				<div class="panel-body" >
+		        					<div style="overflow-x:auto;">
+									<table class= "table table-hover table-bordered" >
+										<thead>
+											<tr>
+												<th style="text-align:center; color:White; background: grey; font-size: 15px;">ID</th>
+												<th style="text-align:center; color:White; background: grey; font-size: 15px;">Book Title</th>
+												<th style="text-align:center; color:White; background: grey; font-size: 15px;">Book Image</th>
+												<th style="text-align:center; color:White; background: grey; font-size: 15px;">Series</th>
+												<th style="text-align:center; color:White; background: grey; font-size: 15px;">Author Name</th>
+												<th style="text-align:center; color:White; background: grey; font-size: 15px;">Description</th>
+												<th style="text-align:center; color:White; background: grey; font-size: 15px;">Pages</th>
+												<th style="text-align:center; color:White; background: grey; font-size: 15px;">Update</th>
+												<th style="text-align:center; color:White; background: grey; font-size: 15px;">Delete</th>
+											
+											</tr>
+										</thead>
+
+										<tbody>
+
+											{% for book in books %}
+												<tr id="delete-{{ book.id }}">
+													<td>{{ book.id }}</td>
+													<td id="{{ book.id }}"><input id="book_title-{{ book.id }}" class="form-control" type="text" value="{{ book.book_title }}" readonly=""></td>
+													{% if book.book_image %}
+														<td><img src="{{ book.book_image.url }}" class="tumbnail" width="50" height="50" id="book_image-{{book.id}}"></td>
+													{% else %}
+														<td>Null</td>
+													{% endif %}
+													<td><input style="text-align: center;" id="series-{{ book.id }}" class="form-control" type="text" value="{{ book.series }}" readonly=""></td>
+													<td><input id="author_name-{{ book.id }}" class="form-control" type="text" value="{{ book.author_name }}" readonly=""></td>
+													<td><input id="description-{{ book.id }}" class="form-control" type="text" value="{{ book.description }}" readonly=""></td>
+													<td><input style="text-align: center;" id="pages-{{ book.id }}" class="form-control" type="text" value="{{ book.pages }}" readonly=""></td>
+													<td id= "edit-{{ book.id }}"><button type="button" class="btn btn-default" onclick="myFunction({{ book.id }})" title="Edit book">Edit</button></td>
+													<td hidden="True" id="save-{{ book.id }}"><button type="button" class="btn btn-default" onclick="fuxn({{ book.id }})" title="Save book" >Save</button></td>
+													<td><button type="button" class="btn btn-default" onclick="myFunction2({{ book.id }})" title="Delete book" >Delete</button></td>
+												</tr>
+											{% endfor %}
+
+										</tbody>
+									</table>
+								</div>
+									<div>
+            							{{ books.start_index }} to {{ books.end_index }} of {{ books.paginator.count }}.
+            						</div>
+
+								</div>
+
+								{% if messages %}
+
+							        <div class="alert alert-success" id="myTabContent" >
+							            {% for message in messages %}
+							                {{ message }}
+							            {% endfor %}
+							        </div>
+							    {% endif %}
+								
+							
+
+								<div style="text-align: center;">
+						    		 <!-- Paginaor -->
+						    		{% if books.has_other_pages %}
+										  <ul class="pagination">
+										    {% if books.has_previous %}
+										      <li><a href="?page={{ books.previous_page_number }}">&laquo;</a></li>
+										    {% else %}
+										      <li class="disabled"><span>&laquo;</span></li>
+										    {% endif %}
+										    {% for i in books.paginator.page_range %}
+										      {% if books.number == i %}
+										        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+										      {% else %}
+										        <li><a href="?page={{ i }}">{{ i }}</a></li>
+										      {% endif %}
+										    {% endfor %}
+										    {% if books.has_next %}
+										      <li><a href="?page={{ books.next_page_number }}">&raquo;</a></li>
+										    {% else %}
+										      <li class="disabled"><span>&raquo;</span></li>
+										    {% endif %}
+										  </ul>
+									{% endif %}
+								</div>
+
+							</div>
+
+						</div>
+						
+						<button id="show" class="btn btn-default">Show Search</button>
+						<div id="hide" class="btn btn-default">Hide Search</div>
+
+						<div class='row allsearch'>
+							<div class='col-sm-12'>
+								<div class="panel-group">
+									<div class="panel panel-default" style="margin-top: 20px;" >
+				        				<div class="panel-heading" style="text-align:center;"><h4>Search Book Record</h4>
+				        				</div>
+				        				<div class="panel-body">
+					        				<!-- For Search -->
+												<form method="post" action="">
+													{% csrf_token %}
+													<div class="row">
+														<div class =col-sm-3>
+															<input id="book_title" name="book_title"  class=form-control type='text' placeholder='search by book_title...' />
+														</div>
+														<div class =col-sm-3>
+															<input id="series" name="series" class=form-control type='text' placeholder='search by series...' />
+														</div>
+														<div class =col-sm-3>
+															<input id="author_name" name="author_name" class=form-control type='text' placeholder='search by author_name...' />
+														</div>
+														<div class =col-sm-3>
+															<input id="pages" name="pages" class=form-control type='text' placeholder='search by pages...' />
+														</div>
+														<button type="submit" class="btn btn-default"
+															style="margin-top:5px; margin-left:15px;">Search</button>
+														<button type="clear" class="btn btn-default"
+														style="margin-top:6px; margin-left:1px;">Clear</button>
+
+													</div><hr>
+												</form>
+												<div style="overflow-x:auto;">
+													
+												<table class= "table table-hover table-bordered"  >
+													<thead>
+														<tr>
+															<th style="text-align:center; color:White; background: grey; font-size: 15px;">ID</th>
+															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Book Title</th>
+															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Book Image</th>
+															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Series</th>
+															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Author Name</th>
+															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Description</th>
+															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Pages</th>
+															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Action</th>
+														
+														</tr>
+													</thead>
+
+													<tbody>
+
+														{% for book in search_book %}
+															<tr style="text-align: center;">
+																<td>{{ book.id }}</td>
+																<td>{{ book.book_title }}</td>
+																<td><img src="{{ book.book_image.url }}" class="tumbnail" width="50" height="50"></td>
+																<td>{{ book.series }}</td>
+																<td>{{ book.author_name }}</td>
+																<td>{{ book.description }}</td>
+																<td>{{ book.pages }}</td>
+																<td style="text-align: center;">
+																	<a href="edit_book/{{book.id}}">
+																		<span class="glyphicon glyphicon-edit" style="color: grey; font-size:19px;"  title="Update Book">
+																		</span>
+																	</a>&nbsp;
+																	<a href="delete_book/{{book.id}}">
+																		<span class="glyphicon glyphicon-remove" style="color: grey; font-size: 19px;" title="Delete Book">
+																		</span>
+																	</a>
+																</td>	
+															</tr>
+														{% endfor %}
+
+													</tbody>
+											</table>
+										</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+						</div>
+				</div>
+			</div>
+
+		<script type="text/javascript">
+			function myFunction(id) {
+				console.log(id);
+				var book_title 	= "#book_title-" + id
+				var series     	= "#series-" + id
+				var description = "#description-" + id
+				var pages       = "#pages-" + id
+				var book_title2 = $(book_title).val();
+				$(book_title).attr('readonly', false);
+				$(series).attr('readonly',false);
+				$(description).attr('readonly',false)
+				$(pages).attr('readonly',false)
+				console.log(book_title2)
+				var edit = "#edit-" + id
+				var save = "#save-" + id
+				$(edit).click(function(){
+					$(save).attr('hidden', false)
+					$(edit).attr('hidden', true)	
+    			});
+    			$(save).click(function(){
+					$(save).attr('hidden', true)
+					$(edit).attr('hidden', false)
+    			});
+			}
+				
+			function fuxn(id) {
+				var ajax_book_titles 	= "#book_title-" + id
+				var ajax_book_title 	= $(ajax_book_titles).val();
+				var ajax_book_images    = "#book_image-" + id
+				// var ajax_book_image     = $(ajax_book_images).val();
+				var ajax_book_image     = $(ajax_book_images).attr('src');
+
+
+				var ajax_seriess 		= "#series-" + id
+				var ajax_series    		= $(ajax_seriess).val();
+				var ajax_author_names 	= "#author_name-" + id
+				var ajax_author_name 	= $(ajax_author_names).val();
+				var ajax_descriptions  	= "#description-" + id
+				var ajax_description   	= $(ajax_descriptions).val();
+				var ajax_pagess  		= "#pages-" + id
+				var ajax_pages   		= $(ajax_pagess).val();
+				console.log("Ready")
+				console.log(id)
+				console.log(ajax_book_title)
+				console.log(ajax_book_image)
+				console.log(ajax_series)
+				console.log(ajax_author_name)
+				console.log(ajax_description)
+				console.log(ajax_pages)
+				
+				// with jquery
+				data = [];
+				data.push({'ajax_book_title'	: ajax_book_title,
+							'ajax_book_image'   : ajax_book_image,
+							'ajax_id'			: id,
+							'ajax_series'		: ajax_series,
+							'ajax_author_name'	: ajax_author_name,
+							'ajax_description'	: ajax_description,
+							'ajax_pages'		: ajax_pages,
+					csrfmiddlewaretoken: '{{ csrf_token }}'});
+
+				$.post("get_book_data/", {"csrfmiddlewaretoken": $("input[name='csrfmiddlewaretoken']").val(),
+                "data" : JSON.stringify(data)},
+                function(response){
+                toastr["success"]("Data has been updated!")
+                $(ajax_book_titles).attr('readonly', true);
+				$(ajax_seriess).attr('readonly',true);
+				$(ajax_descriptions).attr('readonly',true)
+				$(ajax_pagess).attr('readonly',true)
+
+            });
+				// with ajax
+				// $.ajax({
+				// 	url: 'get_book_data/',
+				// 	data: {
+					// 		'ajax_book_title'	: ajax_book_title,
+					// 		'ajax_book_image'   : ajax_book_image,
+					// 		'ajax_id'			: id,
+					// 		'ajax_series'		: ajax_series,
+					// 		'ajax_author_name'	: ajax_author_name,
+					// 		'ajax_description'	: ajax_description,
+					// 		'ajax_pages'		: ajax_pages,
+					// csrfmiddlewaretoken: '{{ csrf_token }}'
+				// 	},
+
+				// 	method   : 'post',
+				// 	dataType : 'json',
+				// 	enctype  : "multipart/form-data",
+				// 	success: function(data){
+				// 		console.log(data)
+				// 		$(ajax_book_titles).attr('readonly', true);
+				// 		$(ajax_seriess).attr('readonly', true);
+				// 		$(ajax_descriptions).attr('readonly',true);
+				// 		$(ajax_pagess).attr('readonly',true)
+				// 	}
+				// });
+
+			};
+
+			function myFunction2(id) {
+				var ajax_book_delete = "#delete-" + id
+				$.ajax({
+					url: 'delete_book_data/',
+					data: {
+							'id' : id,
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+					},
+					method   : 'post',
+					dataType : 'json',
+					success: function(data){
+						console.log(data)
+
+						if(data){
+
+						toastr["success"]("delete data successfully!")
+						$(ajax_book_delete).remove()
+						}
+						else {
+
+							toastr["error"]("something went wrong!")
+						}
+						
+					}
+				});
+
+			};
+			$('#myTabContent').fadeIn().delay(5000).fadeOut();
+		</script>
+
+		<script type="text/javascript">
+			$('select').addClass('form-control')
+		</script>
+
+{% endblock %}
