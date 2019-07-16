@@ -24,4 +24,17 @@ urlpatterns = [
     path('user_logout', views.user_logout, name='user_logout'),
     path('home', views.home, name='home'),
     path('add_book', views.add_book, name='add_book'),
+
+    path('add-book-author', views.add_book_author, name='add_book_author'),
+    path('delete_book/<int:id>/', views.delete_book, name='delete_book'),
+    path('edit_book/<int:id>/', views.update_book, name='edit_book'),
+    path('change_password', views.change_password, name='change_password'),
+    path('group', views.group, name='group'),
+    path('add_employee', views.add_employee, name='add_employee'),
+    path('delete_employee/<int:id>/', views.delete_employee, name='delete_employee'),
+    path('edit_employee/<int:id>/', views.edit_employee, name='edit_employee'),
+    path('userdata', views.user_data, name='userdata'),
+    path('get_book_data/', views.get_book_data, name='get_book_data'),
+    path('delete_book_data/', views.delete_book_data, name='delete_book_data'),
+
 ]

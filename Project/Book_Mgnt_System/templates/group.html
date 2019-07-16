@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+
+{% block content %}
+
+<div class="row">
+	<div class="col-sm-4">
+	</div>
+	<div class="col-sm-4">
+
+		<div class="panel-group" style="margin-top: 150px;">
+			<div class="panel panel-default" id="form" >
+				<div class="panel-heading" style="text-align:center;"><h4>User Group Find</h4></div>
+				<div class="panel-body" style="text-align:center;">
+			 		
+			 		{% for group in user.groups.all %}
+
+			 		    {% if group.name == 'group1' %}
+
+								<button class="btn btn-default"><small>User 1 belong to Group 1 ----> {{ user.username }}</small></button><hr>	
+
+							{% else %}
+
+								<button  class="btn btn-default"><small>User 2 belong to Group 2 ----> {{ user.username }}</small></button><hr>
+
+							{% endif %}
+							
+						{% endfor %}
+
+    					<a href="/user_logout>"><button  class="btn btn-default"><small>Logout</small></button></a>
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+	<div class="col-sm-4">
+	</div>
+
+</div>
+
+{% endblock %}
+
+		

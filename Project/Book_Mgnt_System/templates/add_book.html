@@ -94,8 +94,8 @@
 							            {% endfor %}
 							        </div>
 							    {% endif %}
-								
-							
+
+
 
 								<div style="text-align: center;">
 						    		 <!-- Paginaor -->
@@ -125,7 +125,7 @@
 							</div>
 
 						</div>
-						
+
 						<button id="show" class="btn btn-default">Show Search</button>
 						<div id="hide" class="btn btn-default">Hide Search</div>
 
@@ -160,7 +160,7 @@
 													</div><hr>
 												</form>
 												<div style="overflow-x:auto;">
-													
+
 												<table class= "table table-hover table-bordered"  >
 													<thead>
 														<tr>
@@ -172,7 +172,7 @@
 															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Description</th>
 															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Pages</th>
 															<th style="text-align:center; color:White; background: grey; font-size: 15px;">Action</th>
-														
+
 														</tr>
 													</thead>
 
@@ -196,7 +196,7 @@
 																		<span class="glyphicon glyphicon-remove" style="color: grey; font-size: 19px;" title="Delete Book">
 																		</span>
 																	</a>
-																</td>	
+																</td>
 															</tr>
 														{% endfor %}
 
@@ -229,14 +229,14 @@
 				var save = "#save-" + id
 				$(edit).click(function(){
 					$(save).attr('hidden', false)
-					$(edit).attr('hidden', true)	
+					$(edit).attr('hidden', true)
     			});
     			$(save).click(function(){
 					$(save).attr('hidden', true)
 					$(edit).attr('hidden', false)
     			});
 			}
-				
+
 			function fuxn(id) {
 				var ajax_book_titles 	= "#book_title-" + id
 				var ajax_book_title 	= $(ajax_book_titles).val();
@@ -261,7 +261,7 @@
 				console.log(ajax_author_name)
 				console.log(ajax_description)
 				console.log(ajax_pages)
-				
+
 				// with jquery
 				data = [];
 				data.push({'ajax_book_title'	: ajax_book_title,

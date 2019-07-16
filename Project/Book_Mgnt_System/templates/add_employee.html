@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% block title %}{% endblock %}
+
+{% block content %}
+	<div class="row">
+		<div class="col-sm-4">
+
+			<div class="panel-group">
+    			<div class="panel panel-default" style="margin-top: 20px;">
+    				<div class="panel-heading" style="text-align:center;"><h4>Add Employee Record</h4></div>
+    				<div class="panel-body">
+    					<form method="post">
+    						{% csrf_token %}
+    						{{ form.as_p }}
+    						<button type="submit" class="btn btn-default">Submit</button>
+    						<button type="reset" class="btn btn-default">Reset</button>
+    					</form>
+    	
+    				</div>
+    			</div>
+    		</div>
+
+		</div>
+		<div class="col-sm-8">
+
+			<div class="panel-group">
+					<div class="panel panel-default" style="margin-top: 20px;">
+        				<div class="panel-heading" style="text-align:center;"><h4>View Employee Record</h4>
+        				</div>
+        				<div class="panel-body">
+							<table class= "table table-hover table-bordered"  >
+							<thead>
+								<tr>
+									<th style="text-align:center; color:White; background: grey; font-size: 15px;">ID</th>
+									<th style="text-align:center; color:White; background: grey; font-size: 15px;">Employee Name</th>
+									<th style="text-align:center; color:White; background: grey; font-size: 15px;">Age</th>
+									<th style="text-align:center; color:White; background: grey; font-size: 15px;">Email</th>
+									<th style="text-align:center; color:White; background: grey; font-size: 15px;">Profile</th>
+									<th style="text-align:center; color:White; background: grey; font-size: 15px;">Salary</th>
+									<th style="text-align:center; color:White; background: grey; font-size: 15px;">Address</th>
+									<th style="text-align:center; color:White; background: grey; font-size: 15px;">Actions</th>
+								</tr>
+							</thead>
+
+							<tbody>
+
+								{% for employees in employee %}
+									<tr style="text-align: center;">
+										<td>{{ employees.id }}</td>
+										<td>{{ employees.employee_name }}</td>
+										<td>{{ employees.age }}</td>
+										<td>{{ employees.email }}</td>
+										<td>{{ employees.profile }}</td>
+										<td>{{ employees.salary }}</td>
+										<td>{{ employees.address }}</td>
+										<td id="center">
+											<a href="edit_employee/{{ employees.id }}">
+												<span class="glyphicon glyphicon-edit" style="color: grey; font-size:19px;"  title="Update Employee">
+												</span>
+											</a>&nbsp;
+											<a href="delete_employee/{{ employees.id }}">
+												<span class="glyphicon glyphicon-remove" style="color: grey; font-size: 19px;" title="Delete Employee">
+												</span>
+											</a>
+										</td>											
+									</tr>
+								{% endfor %}
+
+							</tbody>
+						</table>
+						</div>
+
+					</div>
+
+				</div>
+				{% if messages %}
+              		<p class="alert alert-info" >{%for message in messages%}{%if forloop.first%}{{message}}{%endif%}{%endfor%}</p>
+       			{% endif %}
+		</div>
+	</div>
+<script type="text/javascript">
+	$('select').addClass('form-control')
+</script>
+
+{% endblock %}
+
+
